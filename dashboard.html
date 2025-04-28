@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard with Icons</title>
+  <link rel="stylesheet" href="dashboard.css">
+  <!-- FontAwesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+
+<div class="container">
+  <aside class="sidebar">
+    <h2>DASHBOARD</h2>
+    <nav>
+      <button><i class="fas fa-warehouse"></i> INVENTORY</button>
+      <button><i class="fas fa-user-tie"></i> EMPLOYEE</button>
+      <button><i class="fas fa-cash-register"></i> POS INTEGRATION</button>
+      <button><i class="fas fa-users"></i> CUSTOMER</button>
+      <button><i class="fas fa-shopping-cart"></i> SALES</button>
+    </nav>
+    <div class="logout">
+      <i class="fas fa-sign-out-alt"></i>
+      <span>LOG OUT</span>
+    </div>
+  </aside>
+
+  <div class="main-content">
+    <!-- Cards Section Above Activity -->
+    <div class="top-section">
+      <div class="search">
+        <input type="text" placeholder="Search...">
+      </div>
+    
+      <div class="cards-container">
+        <div class="card">
+          <i class="fas fa-users card-icon"></i>
+          <h3>5</h3>
+          <p>NO. OF USERS</p>
+        </div>
+        <div class="card">
+          <i class="fas fa-chart-bar card-icon"></i>
+          <h3>Analytics</h3>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Activity Section Below Cards -->
+    <div class="activity">
+      <h3>ACTIVITY</h3>
+      <div class="activity-header">
+        <span>CUSTOMER</span>
+        <span>COMMENTS</span>
+        <span>RATE</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
