@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inventory Management</title>
+  <link rel="stylesheet" href="inventory.css"> <!-- Link to your existing stylesheet -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Font Awesome for icons -->
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar">
+      <h2>DASHBOARD</h2>
+      <nav>
+        <button><i class="fas fa-warehouse"></i> INVENTORY</button>
+        <button><i class="fas fa-user-tie"></i> EMPLOYEE</button>
+        <button><i class="fas fa-cash-register"></i> POS INTEGRATION</button>
+        <button><i class="fas fa-users"></i> CUSTOMER</button>
+        <button><i class="fas fa-shopping-cart"></i> SALES</button>
+      </nav>
+      <div class="logout">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>LOG OUT</span>
+      </div>
+    </aside>
+
+    <div class="main-content">
+      <div class="top-section">
+        <div class="search">
+          <input type="text" placeholder="Search Inventory...">
+        </div>
+      </div>
+
+      <div class="inventory-section">
+        <h3>Inventory Management</h3>
+        <div class="inventory-actions">
+          <button>Add New Item</button>
+          <button>View Inventory</button>
+        </div>
+
+        <!-- Inventory Table -->
+        <table class="inventory-table">
+          <thead>
+            <tr>
+              <th>Item ID</th>
+              <th>Item Name</th>
+              <th>Quantity</th>
+              <th>Price</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>001</td>
+              <td>Product A</td>
+              <td>20</td>
+              <td>$50</td>
+              <td><button>Edit</button><button>Delete</button></td>
+            </tr>
+            <tr>
+              <td>002</td>
+              <td>Product B</td>
+              <td>15</td>
+              <td>$30</td>
+              <td><button>Edit</button><button>Delete</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Top Selling Products Section -->
+      <div class="top-selling-products">
+        <h3>Top Selling Products</h3>
+        <table class="top-selling-table">
+          <thead>
+            <tr>
+              <th>Product Name</th>
+              <th>Sales Volume</th>
+              <th>Revenue</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Product A</td>
+              <td>500</td>
+              <td>$25,000</td>
+            </tr>
+            <tr>
+              <td>Product B</td>
+              <td>350</td>
+              <td>$10,500</td>
+            </tr>
+            <tr>
+              <td>Product C</td>
+              <td>200</td>
+              <td>$8,000</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script> <!-- Link to your JS file for interactions if needed -->
+</body>
+</html>
