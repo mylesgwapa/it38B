@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>StoreSync | Employee Dashboard</title>
+  <link rel="stylesheet" href="employee.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
+</head>
+<body>
+  <div class="container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <h2>STORESYNC</h2>
+      <nav>
+        <button><i class="fas fa-warehouse"></i> INVENTORY</button>
+        <button><i class="fas fa-user-tie"></i> EMPLOYEE</button>
+        <button><i class="fas fa-cash-register"></i> POS INTEGRATION</button>
+        <button><i class="fas fa-users"></i> CUSTOMER</button>
+        <button><i class="fas fa-shopping-cart"></i> SALES</button>
+      </nav>
+      <div class="logout">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>LOG OUT</span>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <div class="top-section">
+        <div class="search">
+          <input type="text" placeholder="Search Employee..." />
+        </div>
+      </div>
+
+      <!-- Employee Management -->
+      <div class="employee-section">
+        <h3>Employee Management</h3>
+        <div class="employee-actions">
+          <button>Add Employee</button>
+          <button>View All</button>
+        </div>
+
+        <table class="employee-table">
+          <thead>
+            <tr>
+              <th>Employee ID</th>
+              <th>Name</th>
+              <th>Position</th>
+              <th>Email</th>
+              <th>Time In</th>
+              <th>Time Out</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>EMP001</td>
+              <td>Jane Doe</td>
+              <td>Manager</td>
+              <td>jane@example.com</td>
+              <td><button class="in-btn">Time In</button></td>
+              <td><button class="out-btn">Time Out</button></td>
+              <td><button>Edit</button> <button>Delete</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+<!-- WORK HOURS -->
+<section class="hours-section">
+    <h3>Work Hours Summary</h3>
+    <table class="hours-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Position</th>
+          <th>Date</th>
+          <th>Time In</th>
+          <th>Time Out</th>
+          <th>Total Hours</th>
+          <th>Total Pay</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Maria Reyes</td>
+          <td>Cashier</td>
+          <td>2025-04-28</td>
+          <td>8:00 AM</td>
+          <td>5:00 PM</td>
+          <td class="hours">9</td>
+          <td class="pay"></td>
+        </tr>
+        <tr>
+          <td>John Cruz</td>
+          <td>Inventory Clerk</td>
+          <td>2025-04-28</td>
+          <td>9:00 AM</td>
+          <td>6:00 PM</td>
+          <td class="hours">9</td>
+          <td class="pay"></td>
+        </tr>
+        <!-- Add more rows as needed -->
+      </tbody>
+    </table>
+  </section>
+  
+
+      <!-- Payroll Summary -->
+      <div class="payroll-section">
+        <h3>Payroll Summary</h3>
+        <p>Hourly Rate: <strong>₱120</strong></p>
+        <p>Total Hours This Month: <strong>160</strong></p>
+        <p>Total Pay: <strong>₱19,200</strong></p>
+      </div>
+    </div>
+  </div>
+  <script>
+    const hourlyRate = 120; // PHP per hour
+    const rows = document.querySelectorAll(".hours-table tbody tr");
+  
+    rows.forEach(row => {
+      const hoursCell = row.querySelector(".hours");
+      const payCell = row.querySelector(".pay");
+      const hours = parseFloat(hoursCell.textContent);
+      const totalPay = hours * hourlyRate;
+      payCell.textContent = `₱${totalPay.toLocaleString()}`;
+    });
+  </script>
+  
+</body>
+</html>
