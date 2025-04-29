@@ -66,7 +66,7 @@
   .main-content {
     flex: 1;
     padding: 20px;
-    background: url('background-image.jpg') no-repeat center center/cover;
+    background: url('images/a.png') no-repeat center center/cover;
   }
   
   .top-section {
@@ -130,7 +130,7 @@
   
   .activity {
     margin-top: 30px;
-    background: rgb(255, 255, 255);
+    background: rgba(255, 255, 255, 0.561);
     padding: 20px;
     border-radius: 10px;
   }
@@ -146,7 +146,6 @@
     grid-template-columns: 1fr 1fr 1fr;
     text-align: center;
     font-weight: bold;
-    background: #ffffff;
     padding: 10px 0;
     border-radius: 5px;
   }

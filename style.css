@@ -1,3 +1,4 @@
+/* existing styles */
 * {
     margin: 0;
     padding: 0;
@@ -6,15 +7,16 @@
 
 body {
     font-family: Arial, sans-serif;
-    background-image: url('https://thumb.photo-ac.com/6d/6d5739e90fd0f14c322d59c5e49286a2_t.jpeg'); 
+    background-image: url('images/a.png'); 
     background-size: cover; 
     background-position: center; 
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
+    position: relative;
 }
-/* Overlay */
+
 body::before {
     content: '';
     position: absolute;
@@ -22,16 +24,18 @@ body::before {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.4); 
-    z-index: -1; 
+    background: rgba(0, 0, 0, 0.134); 
+    z-index: -1;
 }
+
 .container {
-    background-color: white;
+    background-color: rgba(255, 255, 255, 0.583);
     width: 400px;
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     text-align: center;
+    margin-left: -45%;
 }
 
 .form-container {
@@ -50,20 +54,35 @@ label {
     font-size: 14px;
 }
 
-input[type="text"],
-input[type="password"],
-input[type="email"] {
+.input-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.input-icon {
+    position: relative;
+}
+
+.input-icon i {
+    position: absolute;
+    top: 50%;
+    left: 12px;
+    transform: translateY(-50%);
+    color: #888;
+}
+
+.input-icon input {
     width: 100%;
-    padding: 12px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
+    padding: 12px 12px 12px 40px; /* space for icon */
+    margin-top: 5px;
+    border: 1px solid #d4d1d1;
     border-radius: 5px;
 }
 
 button {
     width: 100%;
     padding: 12px;
-    background: linear-gradient(45deg, #4CAF50, #8BC34A); 
+    background: linear-gradient(45deg, #4c8caf, #4ab7c3); 
     border: none;
     color: white;
     border-radius: 5px;
@@ -73,7 +92,7 @@ button {
 }
 
 button:hover {
-    background: linear-gradient(45deg, #8BC34A, #4CAF50); 
+    background: linear-gradient(45deg, #4a6ec3, #4ca0af); 
 }
 
 p {
@@ -81,7 +100,7 @@ p {
 }
 
 a {
-    color: #4CAF50;
+    color: #4ca3af;
     text-decoration: none;
 }
 
