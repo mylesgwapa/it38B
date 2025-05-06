@@ -3,228 +3,304 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Sari-Sari Store POS</title>
-  <link rel="stylesheet" href="products.css"> <!-- Link to external CSS -->
+  <title>All Products</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f2f2f2;
+    }
+    h2 {
+      margin-bottom: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: white;
+    }
+    th, td {
+      padding: 12px;
+      border: 1px solid #ccc;
+      text-align: left;
+    }
+    img {
+      height: 50px;
+    }
+    button {
+      margin-top: 10px;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+    .cart-table, .checkout-form {
+      margin-top: 30px;
+    }
+    .cart-table th, .cart-table td {
+      border: 1px solid #ccc;
+    }
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.4);
+      padding-top: 60px;
+    }
+    .modal-content {
+      background-color: #fefefe;
+      margin: 5% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+    }
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    /* Receipt Layout */
+    .receipt-item {
+      margin-bottom: 10px;
+    }
+    .receipt-item p {
+      margin: 5px 0;
+    }
+    .receipt-total {
+      font-weight: bold;
+      text-align: right;
+    }
+    .receipt-header {
+      margin-bottom: 20px;
+    }
+    .confirmation-message {
+      font-size: 18px;
+      font-weight: bold;
+      color: green;
+      margin-bottom: 20px;
+    }
+  </style>
 </head>
 <body>
 
-  <div class="container">
-    <h2>Sari-Sari Store POS</h2>
+  <h2>📦 Product List</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Product</th>
+        <th>Price</th>
+        <th>In Stock</th>
+        <th>Image</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="productList"></tbody>
+  </table>
 
-    <h3>Products</h3>
-    <div id="productList" class="product"></div>
+  <h2>🛒 Your Cart</h2>
+  <table class="cart-table">
+    <thead>
+      <tr>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th>Price</th>
+        <th>Total</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="cartList"></tbody>
+  </table>
 
-    <h3>Cart</h3>
-    <ul id="cartItems" class="cart">
-      <li>No items added</li>
-    </ul>
-    <button onclick="showCheckoutModal()">Checkout</button>
+  <button id="checkoutBtn">Checkout</button>
 
-    <!-- Checkout Modal -->
-    <div id="checkoutModal">
-      <div class="modal-content">
-        <h3>Checkout</h3>
-        <table>
-          <thead>
-            <tr>
-              <th>Product</th><th>Price</th><th>Qty</th>
-            </tr>
-          </thead>
-          <tbody id="checkoutItems"></tbody>
-        </table>
-        <p>Total: ₱<span id="totalPrice">0</span></p>
-        <form onsubmit="submitOrder(event)">
-          <input type="text" id="customerName" placeholder="Name" required><br>
-          <input type="text" id="customerAddress" placeholder="Address" required><br>
-          <input type="text" id="customerPhone" placeholder="Phone" required><br>
-          <select id="deliveryMethod" required>
-            <option value="">Delivery Method</option>
-            <option value="Pickup">Pickup</option>
-            <option value="Delivery">Delivery</option>
-          </select><br><br>
-          
-          <!-- Mode of Payment Dropdown -->
-          <select id="paymentMethod" required>
-            <option value="">Mode of Payment</option>
-            <option value="Cash">Cash</option>
-            <option value="Credit Card">Credit Card</option>
-            <option value="Debit Card">Debit Card</option>
-            <option value="Online Payment">Online Payment</option>
-          </select><br><br>
-
-          <button type="submit">Submit Order</button>
-          <button type="button" onclick="closeCheckoutModal()">Cancel</button>
-        </form>
-      </div>
-    </div>
-
-    <!-- Receipt -->
-    <div id="receipt">
-      <div class="modal-content">
-        <h3>Receipt</h3>
-        <p>Name: <span id="receiptCustomerName"></span></p>
-        <p>Address: <span id="receiptCustomerAddress"></span></p>
-        <p>Phone: <span id="receiptCustomerPhone"></span></p>
-        <p>Date: <span id="receiptDate"></span></p>
-        <p>Time: <span id="receiptTime"></span></p>
-        <p>Delivery: <span id="receiptDeliveryMode"></span></p>
-        <p>Payment: <span id="receiptPaymentMode"></span></p> <!-- Added Payment Mode in Receipt -->
-        <table class="receipt-table">
-          <thead>
-            <tr>
-              <th>Product</th><th>Price</th><th>Qty</th>
-            </tr>
-          </thead>
-          <tbody id="receiptItems"></tbody>
-        </table>
-        <p>Total: ₱<span id="receiptTotal">0</span></p>
-        <button onclick="closeReceipt()">Close</button>
-      </div>
+  <!-- Modal -->
+  <div id="checkoutModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h3>Checkout Details</h3>
+      <form id="checkoutForm">
+        <input type="text" id="fullName" placeholder="Full Name" required><br><br>
+        <input type="email" id="email" placeholder="Email" required><br><br>
+        <input type="tel" id="phone" placeholder="Phone" required><br><br>
+        <label for="deliveryMode">Mode of Delivery:</label>
+        <select id="deliveryMode" required>
+          <option value="pickup">Pick-Up</option>
+          <option value="cod">Cash on Delivery</option>
+        </select><br><br>
+        <label for="paymentMode">Mode of Payment:</label>
+        <select id="paymentMode" required>
+          <option value="gcash">G-Cash</option>
+          <option value="bank">Bank</option>
+          <option value="paymaya">PayMaya</option>
+        </select><br><br>
+        <button type="submit">Place Order</button>
+      </form>
     </div>
   </div>
 
+  <div id="receipt" style="display:none; margin-top: 20px;">
+    <h3>Receipt</h3>
+    <div class="confirmation-message" id="confirmationMessage"></div>
+    <div class="receipt-header">
+      <p><strong>Customer:</strong> <span id="receiptName"></span></p>
+      <p><strong>Email:</strong> <span id="receiptEmail"></span></p>
+      <p><strong>Phone:</strong> <span id="receiptPhone"></span></p>
+      <p><strong>Order Time:</strong> <span id="receiptTime"></span></p>
+      <p><strong>Delivery Mode:</strong> <span id="receiptDeliveryMode"></span></p>
+      <p><strong>Payment Mode:</strong> <span id="receiptPaymentMode"></span></p>
+    </div>
+    <div id="receiptDetails"></div>
+    <p class="receipt-total" id="receiptTotal"></p>
+  </div>
+
   <script>
-    const products = [
-      { product: "Rice", price: 50, image: "https://tse2.mm.bing.net/th?id=OIP.aU0y4iKdpsaAypHwGV55AQHaHa&pid=Api&P=0&h=180" },
-      { product: "Noodles", price: 10, image: "https://tse2.mm.bing.net/th?id=OIP.ZeSeIUeCYGY6aJ1S4PWwgAHaHa&pid=Api&P=0&h=180" },
-      { product: "Canned Sardines", price: 20, image: "https://tse3.mm.bing.net/th?id=OIP.FFrJqAIAI4H0HAH1p5qIAwHaFE&pid=Api&P=0&h=180" },
-      { product: "Soft Drinks", price: 25, image: "https://tse1.mm.bing.net/th?id=OIP.SW2qs9wIlrj75LmnfPH8tgHaE7&pid=Api&P=0&h=180" }
-    ];
+    const productList = document.getElementById('productList');
+    const cartList = document.getElementById('cartList');
+    const checkoutForm = document.getElementById('checkoutForm');
+    const receipt = document.getElementById('receipt');
+    const receiptDetails = document.getElementById('receiptDetails');
+    const receiptTotal = document.getElementById('receiptTotal');
+    const receiptName = document.getElementById('receiptName');
+    const receiptEmail = document.getElementById('receiptEmail');
+    const receiptPhone = document.getElementById('receiptPhone');
+    const receiptTime = document.getElementById('receiptTime');
+    const receiptDeliveryMode = document.getElementById('receiptDeliveryMode');
+    const receiptPaymentMode = document.getElementById('receiptPaymentMode');
+    const checkoutBtn = document.getElementById('checkoutBtn');
+    const checkoutModal = document.getElementById('checkoutModal');
+    const closeModal = document.querySelector('.close');
+    const confirmationMessage = document.getElementById('confirmationMessage');
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const products = JSON.parse(localStorage.getItem('products')) || [];
 
-    let cart = [];
-
-    function renderProducts() {
-      const productList = document.getElementById('productList');
-      productList.innerHTML = '';
-      products.forEach(p => {
-        const div = document.createElement('div');
-        div.classList.add('product');
-        div.innerHTML = `
-          <img src="${p.image}" alt="${p.product}">
-          <span>${p.product} - ₱${p.price}</span>
-          <button onclick="addToCart('${p.product}', ${p.price})">Add</button>
+    // Display Products
+    if (products.length === 0) {
+      productList.innerHTML = '<tr><td colspan="5">No products available.</td></tr>';
+    } else {
+      products.forEach((p, index) => {
+        p.id = index + 1;
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${p.name}</td>
+          <td>₱${p.price}</td>
+          <td>${p.quantity}</td>
+          <td><img src="${p.image}" height="50"></td>
+          <td><button onclick="addToCart(${p.id})">Add to Cart</button></td>
         `;
-        productList.appendChild(div);
+        productList.appendChild(row);
       });
     }
 
-    function addToCart(product, price) {
-      const existing = cart.find(item => item.product === product);
-      if (existing) {
-        existing.quantity++;
-      } else {
-        cart.push({ product, price, quantity: 1 });
-      }
+    function addToCart(productId) {
+      const product = products.find(p => p.id === productId);
+      if (!product) return;
+      const existing = cart.find(item => item.id === productId);
+      if (existing) existing.quantity++;
+      else cart.push({ ...product, quantity: 1 });
+      localStorage.setItem('cart', JSON.stringify(cart));
       updateCart();
     }
 
     function updateCart() {
-      const cartItems = document.getElementById('cartItems');
-      cartItems.innerHTML = '';
-
-      if (cart.length === 0) {
-        cartItems.innerHTML = '<li>No items added</li>';
-      } else {
-        cart.forEach(item => {
-          const li = document.createElement('li');
-          li.innerHTML = `
-            ${item.product} - ₱${item.price} x ${item.quantity}
-            <div class="quantity-controls">
-              <button onclick="changeQuantity('${item.product}', -1)">-</button>
-              <button onclick="changeQuantity('${item.product}', 1)">+</button>
-            </div>`;
-          cartItems.appendChild(li);
-        });
-      }
-    }
-
-    function changeQuantity(product, change) {
-      const item = cart.find(i => i.product === product);
-      if (item) {
-        item.quantity += change;
-        if (item.quantity <= 0) {
-          cart = cart.filter(i => i.product !== product);
-        }
-        updateCart();
-      }
-    }
-
-    function showCheckoutModal() {
-      const checkoutItems = document.getElementById('checkoutItems');
-      const totalPriceElement = document.getElementById('totalPrice');
-      checkoutItems.innerHTML = '';
-      let total = 0;
-
+      cartList.innerHTML = '';
       cart.forEach(item => {
         const row = document.createElement('tr');
         row.innerHTML = `
-          <td>${item.product}</td>
+          <td>${item.name}</td>
+          <td>
+            <button onclick="updateQuantity(${item.id}, -1)">-</button>
+            ${item.quantity}
+            <button onclick="updateQuantity(${item.id}, 1)">+</button>
+          </td>
           <td>₱${item.price}</td>
-          <td>${item.quantity}</td>`;
-        checkoutItems.appendChild(row);
-        total += item.price * item.quantity;
+          <td>₱${item.price * item.quantity}</td>
+          <td><button onclick="removeFromCart(${item.id})">Remove</button></td>
+        `;
+        cartList.appendChild(row);
       });
-
-      totalPriceElement.textContent = total;
-      document.getElementById('checkoutModal').style.display = 'flex';
     }
 
-    function closeCheckoutModal() {
-      document.getElementById('checkoutModal').style.display = 'none';
-    }
-
-    function submitOrder(event) {
-      event.preventDefault();
-
-      const customerName = document.getElementById('customerName').value;
-      const customerAddress = document.getElementById('customerAddress').value;
-      const customerPhone = document.getElementById('customerPhone').value;
-      const deliveryMethod = document.getElementById('deliveryMethod').value;
-      const paymentMethod = document.getElementById('paymentMethod').value;  // Get payment method
-
-      const now = new Date();
-      const date = now.toLocaleDateString();
-      const time = now.toLocaleTimeString();
-
-      document.getElementById('checkoutModal').style.display = 'none';
-      showReceipt(customerName, customerAddress, customerPhone, date, time, deliveryMethod, paymentMethod);
-    }
-
-    function showReceipt(name, address, phone, date, time, deliveryMethod, paymentMethod) {
-      document.getElementById('receipt').style.display = 'flex';
-      document.getElementById('receiptCustomerName').textContent = name;
-      document.getElementById('receiptCustomerAddress').textContent = address;
-      document.getElementById('receiptCustomerPhone').textContent = phone;
-      document.getElementById('receiptDate').textContent = date;
-      document.getElementById('receiptTime').textContent = time;
-      document.getElementById('receiptDeliveryMode').textContent = deliveryMethod;
-      document.getElementById('receiptPaymentMode').textContent = paymentMethod;  // Show payment method in receipt
-
-      const receiptItems = document.getElementById('receiptItems');
-      receiptItems.innerHTML = '';
-      let total = 0;
-
-      cart.forEach(item => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td>${item.product}</td>
-          <td>₱${item.price}</td>
-          <td>${item.quantity}</td>`;
-        receiptItems.appendChild(row);
-        total += item.price * item.quantity;
-      });
-
-      document.getElementById('receiptTotal').textContent = total;
-    }
-
-    function closeReceipt() {
-      document.getElementById('receipt').style.display = 'none';
-      cart = [];
+    function updateQuantity(id, change) {
+      const item = cart.find(i => i.id === id);
+      if (!item) return;
+      item.quantity += change;
+      if (item.quantity <= 0) removeFromCart(id);
+      else localStorage.setItem('cart', JSON.stringify(cart));
       updateCart();
     }
 
-    renderProducts();
-  </script>
+    function removeFromCart(id) {
+      cart = cart.filter(i => i.id !== id);
+      localStorage.setItem('cart', JSON.stringify(cart));
+      updateCart();
+    }
 
+    checkoutBtn.onclick = () => checkoutModal.style.display = 'block';
+    closeModal.onclick = () => checkoutModal.style.display = 'none';
+
+    checkoutForm.onsubmit = function(e) {
+      e.preventDefault();
+      const fullName = document.getElementById('fullName').value;
+      const email = document.getElementById('email').value;
+      const phone = document.getElementById('phone').value;
+      const deliveryMode = document.getElementById('deliveryMode').value;
+      const paymentMode = document.getElementById('paymentMode').value;
+      const orderTime = new Date().toLocaleString();
+
+      // Save to receipt
+      receiptName.textContent = fullName;
+      receiptEmail.textContent = email;
+      receiptPhone.textContent = phone;
+      receiptTime.textContent = orderTime;
+      receiptDeliveryMode.textContent = deliveryMode;
+      receiptPaymentMode.textContent = paymentMode;
+
+      let total = 0;
+      let receiptHTML = '';
+      cart.forEach(item => {
+        total += item.quantity * item.price;
+        receiptHTML += `
+          <div>
+            <p><strong>${item.name}</strong> x${item.quantity} - ₱${item.price * item.quantity}</p>
+          </div>
+        `;
+      });
+      receiptDetails.innerHTML = receiptHTML;
+      receiptTotal.innerHTML = `<strong>Total: ₱${total}</strong>`;
+      receipt.style.display = 'block';
+
+      // Save order to localStorage
+      const orders = JSON.parse(localStorage.getItem('orders')) || [];
+      orders.push({
+        id: Date.now(),
+        name: fullName,
+        phone,
+        total,
+        delivery: deliveryMode,
+        payment: paymentMode,
+        date: orderTime
+      });
+      localStorage.setItem('orders', JSON.stringify(orders));
+
+      // Reset
+      confirmationMessage.textContent = "Your order is on the way!";
+      cart = [];
+      localStorage.removeItem('cart');
+      updateCart();
+      checkoutModal.style.display = 'none';
+    }
+
+    updateCart();
+  </script>
 </body>
 </html>
