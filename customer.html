@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Dashboard - Feedback with Reply</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: url('images/a.png') no-repeat center center fixed;
+      background-size: cover;
+      color: #333;
+    }
+
+    /* Sidebar Styles */
+    .sidebar {
+      width: 250px;
+      background-color: #333;
+      color: white;
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      padding: 20px;
+    }
+
+    .sidebar h2 {
+      margin-top: 0;
+      color: #f0c040;
+      text-align: center;
+    }
+
+    .sidebar nav a {
+      display: block;
+      color: white;
+      text-decoration: none;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      font-size: 18px;
+      transition: background 0.3s ease;
+    }
+
+    .sidebar nav a:hover {
+      background-color: #444;
+    }
+
+    .overlay {
+      margin-left: 250px;
+      padding: 40px 20px;
+      background-color: rgba(255, 255, 255, 0.85);
+      min-height: 100vh;
+    }
+
+    .dashboard {
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+
+    .card h2 {
+      margin-top: 0;
+    }
+
+    .stats {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    .stat-box {
+      flex: 1 1 30%;
+      background-color: #f0c040;
+      color: #333;
+      margin: 10px;
+      padding: 20px;
+      border-radius: 6px;
+      text-align: center;
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .stat-box i {
+      font-size: 30px;
+      margin-bottom: 10px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    th, td {
+      border-bottom: 1px solid #ccc;
+      padding: 12px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #eee;
+    }
+
+    .rating {
+      color: #f0c040;
+      font-size: 18px;
+    }
+
+    .actions button {
+      padding: 6px 12px;
+      margin-right: 5px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .actions .reply-btn {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    .actions .delete-btn {
+      background-color: #e74c3c;
+      color: white;
+    }
+
+    .actions button:hover {
+      opacity: 0.85;
+    }
+
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.6);
+    }
+
+    .modal-content {
+      background-color: #fff;
+      margin: 10% auto;
+      padding: 20px;
+      border-radius: 10px;
+      width: 400px;
+      position: relative;
+    }
+
+    .modal-content h3 {
+      margin-top: 0;
+    }
+
+    .modal-content textarea {
+      width: 100%;
+      height: 100px;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    .modal-content button {
+      margin-top: 15px;
+      padding: 8px 16px;
+      background-color: #f0c040;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .close-btn {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      font-size: 20px;
+      cursor: pointer;
+      color: #aaa;
+    }
+
+    .close-btn:hover {
+      color: #000;
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2>DASHBOARD</h2>
+    <nav>
+      <a href="#">Dashboard</a>
+      <a href="#">Customer Feedback</a>
+      <a href="#">Analytics</a>
+      <a href="#">Messages</a>
+    </nav>
+  </div>
+
+  <div class="overlay">
+    <div class="dashboard">
+
+      <!-- Stats Section -->
+      <div class="stats">
+        <div class="stat-box">
+          <i class="fas fa-users"></i>
+          10 Users
+        </div>
+        <div class="stat-box">
+          <i class="fas fa-chart-line"></i>
+          Avg Rating: 4.3 ⭐
+        </div>
+        <div class="stat-box">
+          <i class="fas fa-comments"></i>
+          25 Feedbacks
+        </div>
+      </div>
+
+      <!-- Customer Feedback Table -->
+      <div class="card">
+        <h2>Customer Feedback</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Customer</th>
+              <th>Rating</th>
+              <th>Feedback</th>
+              <th>Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Jane Doe</td>
+              <td class="rating">⭐⭐⭐⭐⭐</td>
+              <td>Great service and fast response!</td>
+              <td>2025-05-04</td>
+              <td class="actions">
+                <button class="reply-btn" onclick="openReplyModal('Jane Doe')">Reply</button>
+                <button class="delete-btn">Delete</button>
+              </td>
+            </tr>
+            <tr>
+              <td>John Smith</td>
+              <td class="rating">⭐⭐⭐⭐</td>
+              <td>Very good experience overall.</td>
+              <td>2025-05-03</td>
+              <td class="actions">
+                <button class="reply-btn" onclick="openReplyModal('John Smith')">Reply</button>
+                <button class="delete-btn">Delete</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reply Modal -->
+  <div id="replyModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal()">&times;</span>
+      <h3>Reply to <span id="customerName"></span></h3>
+      <textarea placeholder="Type your reply here..."></textarea>
+      <button onclick="sendReply()">Send Reply</button>
+    </div>
+  </div>
+
+  <script>
+    function openReplyModal(name) {
+      document.getElementById("replyModal").style.display = "block";
+      document.getElementById("customerName").textContent = name;
+    }
+
+    function closeModal() {
+      document.getElementById("replyModal").style.display = "none";
+    }
+
+    function sendReply() {
+      const name = document.getElementById("customerName").textContent;
+      alert("Reply sent to " + name + " (not really, just a demo!)");
+      closeModal();
+    }
+  </script>
+
+  <!-- Font Awesome CDN for Icons -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js"></script>
+</body>
+</html>
