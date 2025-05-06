@@ -6,18 +6,63 @@
   <title>StoreSync | Employee Dashboard</title>
   <link rel="stylesheet" href="employee.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
+  <style>
+    .view-btn, .edit-btn, .delete-btn {
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      border: none;
+      color: white;
+      margin-right: 5px;
+    }
+    .view-btn { background-color: #007bff; }
+    .edit-btn { background-color: #fd7e14; }
+    .delete-btn { background-color: #dc3545; }
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 999;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-content {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      width: 400px;
+    }
+    .modal-content input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+    }
+    .modal-actions { text-align: right; margin-top: 15px; }
+    .modal-actions button { margin-left: 8px; }
+    .hours-section { display: none; }
+    .modal-content table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .modal-content th, .modal-content td {
+      text-align: left;
+      padding: 6px 0;
+    }
+    .modal-content th {
+      width: 40%;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
-    <!-- Sidebar -->
     <aside class="sidebar">
       <h2>STORESYNC</h2>
       <nav>
-        <button><i class="fas fa-warehouse"></i> INVENTORY</button>
-        <button><i class="fas fa-user-tie"></i> EMPLOYEE</button>
-        <button><i class="fas fa-cash-register"></i> POS INTEGRATION</button>
-        <button><i class="fas fa-users"></i> CUSTOMER</button>
-        <button><i class="fas fa-shopping-cart"></i> SALES</button>
+        <button onclick="showSection('employee')"><i class="fas fa-user-tie"></i> EMPLOYEE</button>
+        <button onclick="showSection('reviews')"><i class="fas fa-cash-register"></i> REVIEWS</button>
       </nav>
       <div class="logout">
         <i class="fas fa-sign-out-alt"></i>
@@ -25,7 +70,6 @@
       </div>
     </aside>
 
-    <!-- Main Content -->
     <div class="main-content">
       <div class="top-section">
         <div class="search">
@@ -33,8 +77,7 @@
         </div>
       </div>
 
-      <!-- Employee Management -->
-      <div class="employee-section">
+      <div id="employee" class="employee-section">
         <h3>Employee Management</h3>
         <div class="employee-actions">
           <button>Add Employee</button>
@@ -47,6 +90,7 @@
               <th>Employee ID</th>
               <th>Name</th>
               <th>Position</th>
+              <th>Department</th>
               <th>Email</th>
               <th>Time In</th>
               <th>Time Out</th>
@@ -58,55 +102,66 @@
               <td>EMP001</td>
               <td>Jane Doe</td>
               <td>Manager</td>
+              <td>Sales</td>
               <td>jane@example.com</td>
-              <td><button class="in-btn">Time In</button></td>
-              <td><button class="out-btn">Time Out</button></td>
-              <td><button>Edit</button> <button>Delete</button></td>
+              <td><button class="in-btn">8:00 AM</button></td>
+              <td><button class="out-btn">5:00 PM</button></td>
+              <td>
+                <button class="view-btn" onclick="openModal('viewModal')"><i class="fas fa-eye"></i> View</button>
+                <button class="edit-btn" onclick="openModal('editModal')"><i class="fas fa-edit"></i> Edit</button>
+                <button class="delete-btn" onclick="openModal('deleteModal')"><i class="fas fa-trash-alt"></i> Delete</button>
+              </td>
             </tr>
           </tbody>
         </table>
       </div>
-<!-- WORK HOURS -->
-<section class="hours-section">
-    <h3>Work Hours Summary</h3>
-    <table class="hours-table">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Position</th>
-          <th>Date</th>
-          <th>Time In</th>
-          <th>Time Out</th>
-          <th>Total Hours</th>
-          <th>Total Pay</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Maria Reyes</td>
-          <td>Cashier</td>
-          <td>2025-04-28</td>
-          <td>8:00 AM</td>
-          <td>5:00 PM</td>
-          <td class="hours">9</td>
-          <td class="pay"></td>
-        </tr>
-        <tr>
-          <td>John Cruz</td>
-          <td>Inventory Clerk</td>
-          <td>2025-04-28</td>
-          <td>9:00 AM</td>
-          <td>6:00 PM</td>
-          <td class="hours">9</td>
-          <td class="pay"></td>
-        </tr>
-        <!-- Add more rows as needed -->
-      </tbody>
-    </table>
-  </section>
-  
 
-      <!-- Payroll Summary -->
+      <section id="reviews" class="hours-section">
+        <h3>Work Hours Summary</h3>
+        <table class="hours-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Position</th>
+              <th>Date</th>
+              <th>Time In</th>
+              <th>Time Out</th>
+              <th>Total Hours</th>
+              <th>Total Pay</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Maria Reyes</td>
+              <td>Cashier</td>
+              <td>2025-04-28</td>
+              <td>8:00 AM</td>
+              <td>5:00 PM</td>
+              <td class="hours">9</td>
+              <td class="pay"></td>
+            </tr>
+            <tr>
+              <td>John Cruz</td>
+              <td>Inventory Clerk</td>
+              <td>2025-04-28</td>
+              <td>9:00 AM</td>
+              <td>6:00 PM</td>
+              <td class="hours">9</td>
+              <td class="pay"></td>
+            </tr>
+            <tr>
+              <td>Jane Doe</td>
+              <td>Manager</td>
+              <td>2025-04-28</td>
+              <td>8:00 AM</td>
+              <td>5:00 PM</td>
+              <td class="hours">9</td>
+              <td class="pay"></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
       <div class="payroll-section">
         <h3>Payroll Summary</h3>
         <p>Hourly Rate: <strong>₱120</strong></p>
@@ -115,10 +170,60 @@
       </div>
     </div>
   </div>
+
+  <!-- View Modal -->
+  <div id="viewModal" class="modal">
+    <div class="modal-content">
+      <h4>View Employee</h4>
+      <table>
+        <tr><th>ID:</th><td>EMP001</td></tr>
+        <tr><th>Name:</th><td>Jane Doe</td></tr>
+        <tr><th>Position:</th><td>Manager</td></tr>
+        <tr><th>Department:</th><td>Sales</td></tr>
+        <tr><th>Email:</th><td>jane@example.com</td></tr>
+        <tr><th>Time In:</th><td>8:00 AM</td></tr>
+        <tr><th>Time Out:</th><td>5:00 PM</td></tr>
+        <tr><th>Total Hours:</th><td>9</td></tr>
+      </table>
+      <div class="modal-actions">
+        <button onclick="closeModal('viewModal')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Modal -->
+  <div id="editModal" class="modal">
+    <div class="modal-content">
+      <h4>Edit Employee</h4>
+      <label>ID: <input type="text" value="EMP001" /></label>
+      <label>Name: <input type="text" value="Jane Doe" /></label>
+      <label>Position: <input type="text" value="Manager" /></label>
+      <label>Department: <input type="text" value="Sales" /></label>
+      <label>Email: <input type="email" value="jane@example.com" /></label>
+      <label>Time In: <input type="text" value="8:00 AM" /></label>
+      <label>Time Out: <input type="text" value="5:00 PM" /></label>
+      <div class="modal-actions">
+        <button onclick="closeModal('editModal')">Cancel</button>
+        <button>Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Modal -->
+  <div id="deleteModal" class="modal">
+    <div class="modal-content">
+      <h4>Confirm Delete</h4>
+      <p>Are you sure you want to delete employee <strong>Jane Doe</strong> (EMP001)?</p>
+      <div class="modal-actions">
+        <button onclick="closeModal('deleteModal')">Cancel</button>
+        <button class="delete-btn">Delete</button>
+      </div>
+    </div>
+  </div>
+
   <script>
-    const hourlyRate = 120; // PHP per hour
+    const hourlyRate = 120;
     const rows = document.querySelectorAll(".hours-table tbody tr");
-  
     rows.forEach(row => {
       const hoursCell = row.querySelector(".hours");
       const payCell = row.querySelector(".pay");
@@ -126,7 +231,27 @@
       const totalPay = hours * hourlyRate;
       payCell.textContent = `₱${totalPay.toLocaleString()}`;
     });
+
+    function openModal(id) {
+      document.getElementById(id).style.display = "flex";
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).style.display = "none";
+    }
+
+    function showSection(sectionId) {
+      document.getElementById("employee").style.display = sectionId === 'employee' ? 'block' : 'none';
+      document.getElementById("reviews").style.display = sectionId === 'reviews' ? 'block' : 'none';
+    }
+
+    window.addEventListener("click", e => {
+      document.querySelectorAll(".modal").forEach(modal => {
+        if (e.target === modal) modal.style.display = "none";
+      });
+    });
+
+    showSection('employee');
   </script>
-  
 </body>
 </html>
