@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sari-Sari Store POS</title>
+  <link rel="stylesheet" href="products.css"> <!-- Link to external CSS -->
+</head>
+<body>
+
+  <div class="container">
+    <h2>Sari-Sari Store POS</h2>
+
+    <h3>Products</h3>
+    <div id="productList" class="product"></div>
+
+    <h3>Cart</h3>
+    <ul id="cartItems" class="cart">
+      <li>No items added</li>
+    </ul>
+    <button onclick="showCheckoutModal()">Checkout</button>
+
+    <!-- Checkout Modal -->
+    <div id="checkoutModal">
+      <div class="modal-content">
+        <h3>Checkout</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Product</th><th>Price</th><th>Qty</th>
+            </tr>
+          </thead>
+          <tbody id="checkoutItems"></tbody>
+        </table>
+        <p>Total: ₱<span id="totalPrice">0</span></p>
+        <form onsubmit="submitOrder(event)">
+          <input type="text" id="customerName" placeholder="Name" required><br>
+          <input type="text" id="customerAddress" placeholder="Address" required><br>
+          <input type="text" id="customerPhone" placeholder="Phone" required><br>
+          <select id="deliveryMethod" required>
+            <option value="">Delivery Method</option>
+            <option value="Pickup">Pickup</option>
+            <option value="Delivery">Delivery</option>
+          </select><br><br>
+          
+          <!-- Mode of Payment Dropdown -->
+          <select id="paymentMethod" required>
+            <option value="">Mode of Payment</option>
+            <option value="Cash">Cash</option>
+            <option value="Credit Card">Credit Card</option>
+            <option value="Debit Card">Debit Card</option>
+            <option value="Online Payment">Online Payment</option>
+          </select><br><br>
+
+          <button type="submit">Submit Order</button>
+          <button type="button" onclick="closeCheckoutModal()">Cancel</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Receipt -->
+    <div id="receipt">
+      <div class="modal-content">
+        <h3>Receipt</h3>
+        <p>Name: <span id="receiptCustomerName"></span></p>
+        <p>Address: <span id="receiptCustomerAddress"></span></p>
+        <p>Phone: <span id="receiptCustomerPhone"></span></p>
+        <p>Date: <span id="receiptDate"></span></p>
+        <p>Time: <span id="receiptTime"></span></p>
+        <p>Delivery: <span id="receiptDeliveryMode"></span></p>
+        <p>Payment: <span id="receiptPaymentMode"></span></p> <!-- Added Payment Mode in Receipt -->
+        <table class="receipt-table">
+          <thead>
+            <tr>
+              <th>Product</th><th>Price</th><th>Qty</th>
+            </tr>
+          </thead>
+          <tbody id="receiptItems"></tbody>
+        </table>
+        <p>Total: ₱<span id="receiptTotal">0</span></p>
+        <button onclick="closeReceipt()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const products = [
+      { product: "Rice", price: 50, image: "https://tse2.mm.bing.net/th?id=OIP.aU0y4iKdpsaAypHwGV55AQHaHa&pid=Api&P=0&h=180" },
+      { product: "Noodles", price: 10, image: "https://tse2.mm.bing.net/th?id=OIP.ZeSeIUeCYGY6aJ1S4PWwgAHaHa&pid=Api&P=0&h=180" },
+      { product: "Canned Sardines", price: 20, image: "https://tse3.mm.bing.net/th?id=OIP.FFrJqAIAI4H0HAH1p5qIAwHaFE&pid=Api&P=0&h=180" },
+      { product: "Soft Drinks", price: 25, image: "https://tse1.mm.bing.net/th?id=OIP.SW2qs9wIlrj75LmnfPH8tgHaE7&pid=Api&P=0&h=180" }
+    ];
+
+    let cart = [];
+
+    function renderProducts() {
+      const productList = document.getElementById('productList');
+      productList.innerHTML = '';
+      products.forEach(p => {
+        const div = document.createElement('div');
+        div.classList.add('product');
+        div.innerHTML = `
+          <img src="${p.image}" alt="${p.product}">
+          <span>${p.product} - ₱${p.price}</span>
+          <button onclick="addToCart('${p.product}', ${p.price})">Add</button>
+        `;
+        productList.appendChild(div);
+      });
+    }
+
+    function addToCart(product, price) {
+      const existing = cart.find(item => item.product === product);
+      if (existing) {
+        existing.quantity++;
+      } else {
+        cart.push({ product, price, quantity: 1 });
+      }
+      updateCart();
+    }
+
+    function updateCart() {
+      const cartItems = document.getElementById('cartItems');
+      cartItems.innerHTML = '';
+
+      if (cart.length === 0) {
+        cartItems.innerHTML = '<li>No items added</li>';
+      } else {
+        cart.forEach(item => {
+          const li = document.createElement('li');
+          li.innerHTML = `
+            ${item.product} - ₱${item.price} x ${item.quantity}
+            <div class="quantity-controls">
+              <button onclick="changeQuantity('${item.product}', -1)">-</button>
+              <button onclick="changeQuantity('${item.product}', 1)">+</button>
+            </div>`;
+          cartItems.appendChild(li);
+        });
+      }
+    }
+
+    function changeQuantity(product, change) {
+      const item = cart.find(i => i.product === product);
+      if (item) {
+        item.quantity += change;
+        if (item.quantity <= 0) {
+          cart = cart.filter(i => i.product !== product);
+        }
+        updateCart();
+      }
+    }
+
+    function showCheckoutModal() {
+      const checkoutItems = document.getElementById('checkoutItems');
+      const totalPriceElement = document.getElementById('totalPrice');
+      checkoutItems.innerHTML = '';
+      let total = 0;
+
+      cart.forEach(item => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${item.product}</td>
+          <td>₱${item.price}</td>
+          <td>${item.quantity}</td>`;
+        checkoutItems.appendChild(row);
+        total += item.price * item.quantity;
+      });
+
+      totalPriceElement.textContent = total;
+      document.getElementById('checkoutModal').style.display = 'flex';
+    }
+
+    function closeCheckoutModal() {
+      document.getElementById('checkoutModal').style.display = 'none';
+    }
+
+    function submitOrder(event) {
+      event.preventDefault();
+
+      const customerName = document.getElementById('customerName').value;
+      const customerAddress = document.getElementById('customerAddress').value;
+      const customerPhone = document.getElementById('customerPhone').value;
+      const deliveryMethod = document.getElementById('deliveryMethod').value;
+      const paymentMethod = document.getElementById('paymentMethod').value;  // Get payment method
+
+      const now = new Date();
+      const date = now.toLocaleDateString();
+      const time = now.toLocaleTimeString();
+
+      document.getElementById('checkoutModal').style.display = 'none';
+      showReceipt(customerName, customerAddress, customerPhone, date, time, deliveryMethod, paymentMethod);
+    }
+
+    function showReceipt(name, address, phone, date, time, deliveryMethod, paymentMethod) {
+      document.getElementById('receipt').style.display = 'flex';
+      document.getElementById('receiptCustomerName').textContent = name;
+      document.getElementById('receiptCustomerAddress').textContent = address;
+      document.getElementById('receiptCustomerPhone').textContent = phone;
+      document.getElementById('receiptDate').textContent = date;
+      document.getElementById('receiptTime').textContent = time;
+      document.getElementById('receiptDeliveryMode').textContent = deliveryMethod;
+      document.getElementById('receiptPaymentMode').textContent = paymentMethod;  // Show payment method in receipt
+
+      const receiptItems = document.getElementById('receiptItems');
+      receiptItems.innerHTML = '';
+      let total = 0;
+
+      cart.forEach(item => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${item.product}</td>
+          <td>₱${item.price}</td>
+          <td>${item.quantity}</td>`;
+        receiptItems.appendChild(row);
+        total += item.price * item.quantity;
+      });
+
+      document.getElementById('receiptTotal').textContent = total;
+    }
+
+    function closeReceipt() {
+      document.getElementById('receipt').style.display = 'none';
+      cart = [];
+      updateCart();
+    }
+
+    renderProducts();
+  </script>
+
+</body>
+</html>
