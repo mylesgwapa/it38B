@@ -1,3 +1,8 @@
+<?php
+// Start the session to handle error/success messages
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,6 +19,23 @@
                 <img src="images/logo.png" alt="Logo" class="header-logo">
                 <h2>Sign Up</h2>
             </div>
+
+            <!-- Display Error Message -->
+            <?php if (isset($_SESSION['signup_error'])) : ?>
+                <div class="error-message" style="color: red; margin-bottom: 10px;">
+                    <?php echo htmlspecialchars($_SESSION['signup_error']); ?>
+                    <?php unset($_SESSION['signup_error']); // Clear error message after displaying ?>
+                </div>
+            <?php endif; ?>
+
+            <!-- Display Success Message -->
+            <?php if (isset($_SESSION['signup_success'])) : ?>
+                <div class="success-message" style="color: green; margin-bottom: 10px;">
+                    <?php echo htmlspecialchars($_SESSION['signup_success']); ?>
+                    <?php unset($_SESSION['signup_success']); // Clear success message after displaying ?>
+                </div>
+            <?php endif; ?>
+
             <form action="signup-action.php" method="POST">
                 <div class="input-group">
                     <label for="username">Username</label>
@@ -28,6 +50,22 @@
                     <div class="input-icon">
                         <i class="fas fa-envelope"></i>
                         <input type="email" id="email" name="email" required>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="position">Position</label>
+                    <div class="input-icon">
+                        <i class="fas fa-briefcase"></i>
+                        <input type="text" id="position" name="position" required>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="department">Department</label>
+                    <div class="input-icon">
+                        <i class="fas fa-building"></i>
+                        <input type="text" id="department" name="department" required>
                     </div>
                 </div>
 
@@ -49,7 +87,7 @@
 
                 <button type="submit">Sign Up</button>
             </form>
-            <p>Already have an account? <a href="index.html">Login</a></p>
+            <p>Already have an account? <a href="index.php">Login</a></p>
         </div>
     </div>
 </body>

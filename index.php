@@ -1,3 +1,8 @@
+<?php
+// Start the session to handle error/success messages
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,8 +17,16 @@
     <div class="container">
         <div class="form-container">
             <h2>STORESYNC</h2>
+
+            <!-- Display Error Message -->
+            <?php if (isset($_SESSION['login_error'])) : ?>
+                <div class="error-message" style="color: red; margin-bottom: 10px;">
+                    <?php echo htmlspecialchars($_SESSION['login_error']); ?>
+                    <?php unset($_SESSION['login_error']); // Clear error message after displaying ?>
+                </div>
+            <?php endif; ?>
+
             <form action="login-action.php" method="POST">
-                
                 <div class="input-group">
                     <label for="username">Username</label>
                     <div class="input-icon">
@@ -32,7 +45,7 @@
 
                 <button type="submit">Login</button>
             </form>
-            <p>Don't have an account? <a href="signup.html">Sign Up</a></p>
+            <p>Don't have an account? <a href="signup.php">Sign Up</a></p>
         </div>
     </div>
 </body>

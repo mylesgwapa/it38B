@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sales Monitoring</title>
+  <link rel="stylesheet" href="sales.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* You can move this to sales.css if preferred */
+    body {
+      background: url('a.png') no-repeat center center fixed;
+      background-size: cover;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      background: rgba(255, 255, 255, 0.9); /* white with slight transparency */
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    h3, h4 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .sales-summary {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+    }
+    .summary-item {
+      background: #f0f0f0;
+      border-radius: 8px;
+      padding: 15px 25px;
+      margin: 10px;
+      width: 180px;
+      text-align: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .summary-item h4 {
+      margin-bottom: 10px;
+      color: #333;
+    }
+    .summary-item p {
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    table thead {
+      background: #333;
+      color: #fff;
+    }
+    table th, table td {
+      padding: 12px;
+      border: 1px solid #ccc;
+      text-align: center;
+    }
+    table tbody tr:nth-child(even) {
+      background: #f9f9f9;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="main-content">
+      <div class="sales-monitoring">
+        <h3>Sales Monitoring</h3>
+        <div class="sales-summary">
+          <div class="summary-item">
+            <h4>Total Sales</h4>
+            <p id="total-sales">0</p>
+          </div>
+          <div class="summary-item">
+            <h4>Revenue</h4>
+            <p id="revenue">$0</p>
+          </div>
+          <div class="summary-item">
+            <h4>Expenses</h4>
+            <p id="expenses">$0</p>
+          </div>
+          <div class="summary-item">
+            <h4>Profit</h4>
+            <p id="profit">$0</p>
+          </div>
+        </div>
+
+        <h4>Sales Details</h4>
+        <table class="transaction-table">
+          <thead>
+            <tr>
+              <th>Product Name</th>
+              <th>Sales Volume</th>
+              <th>Revenue</th>
+            </tr>
+          </thead>
+          <tbody id="sales-details">
+            <tr>
+              <td>Product A</td>
+              <td>500</td>
+              <td>25000</td>
+            </tr>
+            <tr>
+              <td>Product B</td>
+              <td>350</td>
+              <td>10500</td>
+            </tr>
+            <tr>
+              <td>Product C</td>
+              <td>200</td>
+              <td>8000</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const rows = document.querySelectorAll('#sales-details tr');
+      let totalSales = 0;
+      let revenue = 0;
+      let expenses = 0;
+
+      rows.forEach(row => {
+        const salesVolume = parseInt(row.children[1].textContent);
+        const revenueAmount = parseFloat(row.children[2].textContent);
+        
+        totalSales += salesVolume;
+        revenue += revenueAmount;
+      });
+
+      expenses = revenue * 0.6; // Example: assume 60% of revenue is expense
+      const profit = revenue - expenses;
+
+      document.getElementById('total-sales').textContent = totalSales;
+      document.getElementById('revenue').textContent = `$${revenue.toLocaleString()}`;
+      document.getElementById('expenses').textContent = `$${expenses.toLocaleString()}`;
+      document.getElementById('profit').textContent = `$${profit.toLocaleString()}`;
+    });
+  </script>
+</body>
+</html>

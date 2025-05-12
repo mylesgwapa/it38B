@@ -1,3 +1,4 @@
+
 * {
     margin: 0;
     padding: 0;
@@ -13,6 +14,7 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
+    position: relative;
 }
 
 body::before {
@@ -35,39 +37,47 @@ body::before {
 }
 
 .form-container {
-    background-color: rgba(255, 255, 255, 0.678);
+    background-color: rgba(255, 255, 255, 0.583);
     width: 400px;
-    padding: 10px;
+    padding: 15px;
     border-radius: 10px;
-    box-shadow: 0px 4px 8px rgba(161, 158, 158, 0.038);
+    box-shadow: 0px 4px 8px rgba(161, 158, 158, 0.1);
     text-align: left;
     position: relative;
-    margin-right: 55%;
+    margin-right: 60%;
+    margin-bottom: -16%;
 }
 
 .form-header {
     display: flex;
-    align-items: left;
-    margin-bottom: 5px;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
 }
 
 .header-logo {
-    width: 40px;
+    width: 50px;
     height: auto;
     margin-right: 10px;
 }
 
+.form-header h2 {
+    font-size: 24px;
+    color: #333;
+    margin: 0;
+}
 
 .input-group {
-    width: 95%;
-    margin: 5px 0;
+    width: 100%;
+    margin: 10px 0;
 }
 
 .input-group label {
     display: block;
-    margin-bottom: 8px;
+    margin-bottom: 5px;
     text-align: left;
     font-size: 14px;
+    color: #333;
 }
 
 .input-icon {
@@ -87,14 +97,14 @@ input[type="password"],
 input[type="email"] {
     width: 100%;
     padding: 12px 12px 12px 40px;
-    margin: 10px 0;
+    margin-top: 5px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    font-size: 14px;
 }
 
-
 button {
-    width: 94%;
+    width: 100%;
     padding: 12px;
     background: linear-gradient(45deg, #4c8caf, #4ab7c3); 
     border: none;
@@ -103,16 +113,17 @@ button {
     font-size: 16px;
     cursor: pointer;
     transition: background 0.3s ease;
+    margin-top: 15px;
 }
 
 button:hover {
     background: linear-gradient(45deg, #4a6ec3, #4ca0af); 
 }
 
-
 p {
-    margin-top: 10px;
+    margin-top: 15px;
     text-align: center;
+    font-size: 14px;
 }
 
 a {
@@ -122,8 +133,4 @@ a {
 
 a:hover {
     text-decoration: underline;
-}
-h2 {
-    text-align: center;
-    flex: 1;
 }

@@ -18,6 +18,7 @@
       background: url('images/homey-es.jpg') no-repeat center center fixed;
       background-size: cover;
       height: 100vh;
+      min-height: 100vh; /* Added min-height for better responsiveness */
       position: relative;
       color: white;
     }
@@ -58,7 +59,7 @@
       font-size: 50px;
       margin-bottom: 30px;
       padding-left: 10%;
-      padding-top: -45%;
+      margin-top: 20%; /* Adjusted for better positioning */
       line-height: 1.2;
     }
 
@@ -91,17 +92,16 @@
     <div class="nav">
       <a href="feedback.html">FeedBack</a>
       <a href="landingpage.html">Home</a>
-      <a href="products.html">Shop</a>
+      <a href="user_login.php">Shop</a>
       <a href="#about">About Us</a>
       <a href="#contact">Contact Us</a>
     </div>
     <div class="content">
       <h1>
         <span class="part1">Where Retail </span>
-       
         <span class="part2">meets Real Time Syncing</span>
       </h1>
-      <button class="get-started-btn" onclick="window.location.href='index.html'">GET STARTED</button>
+      <button class="get-started-btn" onclick="window.location.href='index.php'">GET STARTED</button>
     </div>
   </div>
 </body>
