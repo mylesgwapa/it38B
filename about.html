@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>About Us</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f4f4;
+      color: #333;
+    }
+ .hero {
+      background: url('images/a.png') no-repeat center center fixed;
+      background-size: cover;
+      height: 100vh;
+      min-height: 100vh;
+      position: relative;
+      color: white;
+    }
+
+
+    header {
+      background-color: #333;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: flex-end;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin-left: 20px;
+      font-size: 16px;
+      padding: 8px 14px;
+      border-radius: 6px;
+      transition: background 0.3s;
+    }
+
+    nav a:hover {
+      background-color: #555;
+      color: #ffdd57;
+    }
+
+    .content {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      text-align: center;
+      color: #222;
+    }
+
+    /* Profiles container */
+    .profiles {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 2rem;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .profile {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+      padding: 1rem;
+      flex: 1 1 45%; /* Responsive two-column */
+      text-align: center;
+    }
+
+    .profile img {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin-bottom: 1rem;
+      border: 3px solid #f0c040;
+    }
+
+    .profile h2 {
+      margin: 0.5rem 0;
+      font-size: 1.3rem;
+      color: #333;
+    }
+
+    .profile p {
+      font-size: 1rem;
+      color: #666;
+      line-height: 1.4;
+    }
+
+    /* Responsive for smaller screens */
+    @media (max-width: 600px) {
+      .profiles {
+        flex-direction: column;
+      }
+      .profile {
+        flex: 1 1 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+
+
+    <div class="content">
+    <a href="landingpage.html" style="display: inline-block; margin-bottom: 1rem; text-decoration: none; color: white; background-color: #333; padding: 10px 16px; border-radius: 6px;">← Back</a>
+    <h1>About Us</h1>
+    <p>Welcome to our Sari-Sari store! We are committed to serving our community with quality products and friendly service. Our mission is to provide convenient, affordable, and accessible goods to all our customers. Thank you for supporting us!</p>
+
+    <div class="profiles">
+      <div class="profile">
+        <img src="images/my.jpg" alt="Maria Santos">
+        <h2> MYLES OBALANG</h2>
+        <p>MYLES is the founder and heart of our Sari-Sari store. With over 10 years of experience, she ensures the store runs smoothly and that customers always feel welcomed.</p>
+      </div>
+
+      <div class="profile">
+        <img src="images/KEY.jpg" alt="Juan Dela Cruz">
+        <h2>KEYNA GOGO</h2>
+        <p>KEYNA manages our inventory and supplier relations, guaranteeing that we always have fresh products and fair prices for our customers.</p>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

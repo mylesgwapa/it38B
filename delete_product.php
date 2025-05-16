@@ -1,26 +1,42 @@
 <?php
-include 'db_connection.php';
+session_start();
+require 'db_connection.php';
 
-if (isset($_POST['product_id'])) {
-    $product_id = $_POST['product_id'];
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (empty($_POST['product_id'])) {
+        $_SESSION['error'] = "Invalid product ID.";
+        header("Location: products.php");
+        exit;
+    }
 
-    // Prepare the SQL DELETE statement
+    $product_id = intval($_POST['product_id']);
+
     $stmt = $conn->prepare("DELETE FROM products WHERE product_id = ?");
     $stmt->bind_param("i", $product_id);
 
-    if ($stmt->execute()) {
-        // Redirect to inventory page after deletion
-        header("Location: pos.php#inventory");
-        exit;
-    } else {
-        echo "Error: " . $stmt->error;
+    try {
+        $stmt->execute();
+
+        if ($stmt->affected_rows > 0) {
+            $_SESSION['success'] = "Product deleted successfully.";
+        } else {
+            $_SESSION['error'] = "Product not found or already deleted.";
+        }
+    } catch (mysqli_sql_exception $e) {
+        // Check if error is due to foreign key constraint
+        if ($conn->errno == 1451) {
+            $_SESSION['error'] = "Cannot delete product because it is linked to existing orders.";
+        } else {
+            $_SESSION['error'] = "Database error: " . $e->getMessage();
+        }
     }
 
-    // Close the prepared statement
     $stmt->close();
-} else {
-    echo "No product ID specified.";
-}
+    $conn->close();
 
-$conn->close();
-?>
+    header("Location: pos.php");
+    exit;
+} else {
+    header("Location: pos.php");
+    exit;
+}
