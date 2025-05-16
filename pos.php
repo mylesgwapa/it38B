@@ -202,16 +202,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_status'])) {
 <section id="viewOrders" style="margin-top: 50px;">
   <h2>View Orders</h2>
   <?php
+  include 'db_connection.php'; // Your DB connection
+
   // Fetch orders with customer names
-  $orders_sql = "SELECT o.order_id, c.customername, o.order_date, o.status 
+  $orders_sql = "SELECT o.order_id, c.customername, o.order_date, o.status, o.total_amount
                  FROM orders o 
                  JOIN customers c ON o.customer_id = c.customer_id
                  ORDER BY o.order_date DESC";
   $orders_result = $conn->query($orders_sql);
 
   if ($orders_result->num_rows > 0) {
-      echo "<table>";
-      echo "<thead><tr><th>Order ID</th><th>Customer</th><th>Date</th><th>Status</th><th>Update Status</th><th>Delete</th></tr></thead><tbody>";
+      echo "<table border='1' cellpadding='10'>";
+      echo "<thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Products Ordered</th>
+                <th>Total Amount</th>
+                <th>Update Status</th>
+                <th>Delete</th>
+              </tr>
+            </thead><tbody>";
 
       while ($order = $orders_result->fetch_assoc()) {
           echo "<tr>";
@@ -220,9 +233,42 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_status'])) {
           echo "<td>".date('Y-m-d', strtotime($order['order_date']))."</td>";
           echo "<td>".$order['status']."</td>";
 
+          // Get products for this order
+          $order_id = $order['order_id'];
+          $products_sql = "SELECT p.name, oi.quantity, oi.price 
+                           FROM order_items oi 
+                           JOIN products p ON oi.product_id = p.product_id 
+                           WHERE oi.order_id = ?";
+          $stmt = $conn->prepare($products_sql);
+          $stmt->bind_param("i", $order_id);
+          $stmt->execute();
+          $products_result = $stmt->get_result();
+
+          $product_details = "<table style='border-collapse: collapse; width: 100%;'>";
+          $product_details .= "<thead><tr><th style='text-align: left;'>Product Name</th><th style='text-align: center;'>Quantity</th><th style='text-align: right;'>Price</th><th style='text-align: right;'>Subtotal</th></tr></thead><tbody>";
+
+          $calculated_total = 0;
+
+          while ($product = $products_result->fetch_assoc()) {
+              $subtotal = $product['quantity'] * $product['price'];
+              $calculated_total += $subtotal;
+              $product_details .= "<tr>
+                                    <td>".htmlspecialchars($product['name'])."</td>
+                                    <td style='text-align: center;'>".$product['quantity']."</td>
+                                    <td style='text-align: right;'>₱".number_format($product['price'], 2)."</td>
+                                    <td style='text-align: right;'>₱".number_format($subtotal, 2)."</td>
+                                  </tr>";
+          }
+          $stmt->close();
+          $product_details .= "</tbody></table>";
+
+          echo "<td>$product_details</td>";
+          // Show recalculated total or the one from DB:
+          echo "<td style='text-align: right;'>₱" . number_format($calculated_total, 2) . "</td>";
+
           echo "<td>
                   <form method='POST'>
-                    <input type='hidden' name='order_id' value='".$order['order_id']."' />
+                    <input type='hidden' name='order_id' value='".$order_id."' />
                     <select name='status' required>
                       <option value='Pending' ".($order['status']=='Pending'?'selected':'').">Pending</option>
                       <option value='Processing' ".($order['status']=='Processing'?'selected':'').">Processing</option>
@@ -234,7 +280,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_status'])) {
 
           echo "<td>
                   <form method='POST' onsubmit=\"return confirm('Delete this order?');\">
-                    <input type='hidden' name='order_id' value='".$order['order_id']."' />
+                    <input type='hidden' name='order_id' value='".$order_id."' />
                     <button type='submit' name='delete_order'>Delete</button>
                   </form>
                 </td>";
@@ -246,6 +292,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_status'])) {
   }
   ?>
 </section>
+
 
 <section id="inventory" style="margin-top: 50px;">
   <h2>Inventory Status</h2>

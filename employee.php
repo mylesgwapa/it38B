@@ -29,6 +29,12 @@ $employee_count = mysqli_num_rows($result);
   <link rel="stylesheet" href="inventory.css"> 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> 
   <style>
+    .main-content {
+    flex: 1;
+    padding: 20px;
+    background: url('images/a.png') no-repeat center center/cover;
+  }
+  
     .employee-section {
       padding: 20px;
     }
@@ -100,6 +106,116 @@ $employee_count = mysqli_num_rows($result);
     #addForm button:hover {
       opacity: 0.9;
     }
+           * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+  }
+  
+  body {
+    background: #e1e1e1;
+  }
+  
+  .container {
+    display: flex;
+    height: 100vh;
+  }
+  
+  .sidebar {
+    background:rgba(105, 98, 98, 0.85);
+    width: 350px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .sidebar h2 {
+    margin-bottom: -70px; 
+    text-align: center;
+    font-size: 24px;
+      color: white;
+  }
+  
+  .sidebar nav {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .sidebar nav button {
+    background:rgba(167, 162, 162, 0.91);
+    border: none;
+    padding: 15px 19px;
+    text-align: left;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 40px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    transition: background 0.3s;
+  }
+  
+  .sidebar nav button:hover {
+    background:rgb(214, 205, 205);
+  }
+  .logout {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.sidebar .logout button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: none;
+    padding: 12px 20px;
+    font-size: 16px;
+      font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    background: transparent;  /* No background */
+    color: inherit;            /* Inherit text color */
+}
+
+.sidebar .logout button:hover {
+    text-decoration: underline; /* Optional hover effect */
+}
+.edit-btn, .delete-btn {
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    margin: 4px;
+}
+
+.edit-btn {
+    background-color: #007BFF;
+    color: white;
+}
+
+.edit-btn:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+.delete-btn {
+    background-color: #DC3545;
+    color: white;
+}
+
+.delete-btn:hover {
+    background-color: #a71d2a;
+    transform: scale(1.05);
+}
+
   </style>
 </head>
 <body>
@@ -113,9 +229,11 @@ $employee_count = mysqli_num_rows($result);
         <button onclick="location.href='summary.php'"><i class="fas fa-cash-register"></i> REVIEWS</button>
       </nav>
       <div class="logout">
+    <button onclick="location.href='logout.php'">
         <i class="fas fa-sign-out-alt"></i>
-        <span><a href="logout.php">LOG OUT</a></span>
-      </div>
+        <span>LOG OUT</span>
+    </button>
+</div>
     </aside>
 
     <div class="main-content">
@@ -152,8 +270,13 @@ $employee_count = mysqli_num_rows($result);
                   <td><?php echo htmlspecialchars($row['position']); ?></td>
                   <td><?php echo htmlspecialchars($row['department']); ?></td>
                   <td>
-                    <a href="edit_employee.php?id=<?php echo $row['id']; ?>"><button>Edit</button></a>
-                    <a href="employee.php?delete_id=<?php echo $row['id']; ?>" onclick="return confirm('Are you sure you want to delete this employee?');"><button class="cancel">Delete</button></a>
+                 <a href="edit_employee.php?id=<?php echo $row['id']; ?>">
+    <button class="edit-btn">Edit</button>
+</a>
+<a href="employee.php?delete_id=<?php echo $row['id']; ?>" onclick="return confirm('Are you sure you want to delete this employee?');">
+    <button class="delete-btn">Delete</button>
+</a>
+
                   </td>
                 </tr>
               <?php endwhile; ?>

@@ -45,9 +45,95 @@ mysqli_close($conn);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>STORESYNC Dashboard</title>
     <link rel="stylesheet" href="dashboard.css">
+    <!-- Font Awesome CDN for Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         /* Table Styling */
+        * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+  }
+  
+  body {
+    background: #e1e1e1;
+  }
+  
+  .container {
+    display: flex;
+    height: 100vh;
+  }
+  
+  .sidebar {
+    background:rgba(92, 91, 91, 0.72);
+    width: 350px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .sidebar h2 {
+    margin-bottom: -70px; 
+    text-align: center;
+    font-size: 24px;
+      color: white;
+  }
+  
+  .sidebar nav {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .sidebar nav button {
+    background:rgba(167, 162, 162, 0.91);
+    border: none;
+    padding: 15px 19px;
+    text-align: left;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 40px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    transition: background 0.3s;
+  }
+  
+  .sidebar nav button:hover {
+    background:rgb(214, 205, 205);
+  }
+.logout {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.sidebar .logout button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: none;
+    padding: 12px 20px;
+    font-size: 16px;
+      font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    background: transparent;  /* No background */
+    color: inherit;            /* Inherit text color */
+}
+
+.sidebar .logout button:hover {
+    text-decoration: underline; /* Optional hover effect */
+}
+
+
+
+
         table {
             width: 100%;
             border-collapse: collapse;
@@ -96,10 +182,13 @@ mysqli_close($conn);
             <button onclick="location.href='customer.php'"><i class="fas fa-users"></i> CUSTOMER</button>
             <button onclick="location.href='sales.php'"><i class="fas fa-shopping-cart"></i> SALES</button>
         </nav>
-        <div class="logout">
-            <i class="fas fa-sign-out-alt"></i>
-            <span>LOG OUT</span>
-        </div>
+      <div class="logout">
+    <button onclick="location.href='logout.php'">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>LOG OUT</span>
+    </button>
+</div>
+
     </aside>
 
     <div class="main-content">
